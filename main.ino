@@ -1,44 +1,41 @@
-// базовый пример инициализации и вывода текста
-#include <LiquidCrystal_I2C.h>  // подключаем библу
-#include <Servo.h> //используем библиотеку для работы с сервоприводом
+
+#include <LiquidCrystal_I2C.h>
+#include <Servo.h> 
 
 
-// Дисплей
-// адрес дисплея 0x3f или 0x27
-// размер дисплея 16x2 (поддерживаются и другие, например 20x4)
-LiquidCrystal_I2C lcd(0x27, 16, 2);  // адрес, столбцов, строк
+/**
+ * Display
+ * adress 0x3f or 0x27
+ * Display's sizes 16x2
+*/
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-// Лазер
-#define LASER 6 // задаем имя для Pin лазера, цифра означает цифровой вход
+// Laser
+#define LASER 6 // name and display port(pin out)
 
-// Модуль джойстика
-const int Y_PIN = 1;           // Потенциометр оси Y подключен к аналоговому входу 5 
-const int X_PIN = 2;           // Потенциометр оси X подключен к аналоговому входу 4
+// Analog stick
+const int Y_PIN = 1;           // Потенциометр оси Y подключен к analog port 5 
+const int X_PIN = 2;           // Потенциометр оси X подключен к analog port 4
 сonst int BUTTON_PIN = 2;      // Кнопка подключена к цифровому выводу 2 
 float stepSize = 180F / 1024;  // Вычисляем шаг. градусы / на градацию 
 // Угол поворота джойстика 180 градусов, АЦП выдает значения от 0 до 1023, всего 1024 градации
 
-// Сервопривод
-Servo servo; //объявляем переменную servo типа Servo
-const int servoPort = 10; // задаем необхоимый цифровой порт
+// Servo
+Servo servo;
+const int servoPort = 10; // Digital port
 
-void setup() {
-    Serial.begin(9600);  // Скорость работы с монитором орта 
-
-    // Сервопривод
-    servo.attach(servoPort); //привязываем привод к порту 
-    // Лазер
-    pinMode(LASER, OUTPUT); // инициализируем Pin выход 
-
-    // Дисплей
-    lcd.init();           // инициализация
-    lcd.backlight();      // включить подсветку  
-    lcd.setCursor(1, 0);  // столбец 1 строка 0
-    lcd.print("Hello, world!");
-    lcd.setCursor(4, 1);  // столбец 4 строка 1
-    lcd.print("GyverKIT");
+void setup() 
+{
+    Serial.begin(9600);
+    servo.attach(servoPort);
+    pinMode(LASER, OUTPUT); 
+        lcd.init();
+    lcd.backlight();      // light on
+    lcd.setCursor(1, 0);  
+    lcd.print("Hello, world!");    
 }
-void loop() {
+void loop() 
+{
     int yVal = analogRead(Y_PIN);   // Задаем переменную yVal для считывания показаний аналогового значения
     int xVal = analogRead(X_PIN);
     float yAngle = yVal * stepSize; // Переводим выходные данные yVal в угол наклона джойстика (от 0 до 180)
